@@ -7,15 +7,15 @@ storage, Google Authenticator migration imports, and backup codes.
 [![license](https://img.shields.io/npm/l/otpk)](https://github.com/amansoomro062/otpk/blob/main/LICENSE)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/otpk?activeTab=dependencies)
 
-One code path runs everywhere — Node.js 20+, Bun, Deno, edge workers, and
-browsers — because all cryptography goes through the standard Web Crypto API
+One code path runs everywhere - Node.js 20+, Bun, Deno, edge workers, and
+browsers - because all cryptography goes through the standard Web Crypto API
 (`globalThis.crypto.subtle`). No runtime dependencies, no platform shims.
 
 ## Why otpk?
 
 - **`otplib`** is built around a plugin architecture: the core package does
   nothing until you wire up crypto and base32 plugins. `otpk` is one package
-  with zero configuration — the standard Web Crypto API is the only crypto
+  with zero configuration - the standard Web Crypto API is the only crypto
   backend, and it is always there.
 - **`speakeasy`** is effectively unmaintained (no release in years) and
   predates modern runtimes. `otpk` is actively maintained, ships TypeScript
@@ -50,7 +50,7 @@ import { buildUri, generateSecret, verifyTotp } from "otpk";
 const secret = await generateSecret(); // "JBSWY3DPEHPK3PXP..." (32 chars)
 
 // 2. Hand the user an otpauth:// URI to scan with any authenticator app
-//    (render it as a QR code — see below).
+//    (render it as a QR code - see below).
 const uri = buildUri({
   label: "alice@example.com",
   secret,
@@ -58,14 +58,14 @@ const uri = buildUri({
 });
 
 // 3. Login: verify the 6-digit code the user types in.
-const ok = await verifyTotp(secret, codeFromLoginForm); // ±1 step window by default
+const ok = await verifyTotp(secret, codeFromLoginForm); // +/-1 step window by default
 if (!ok) {
   // reject the login
 }
 ```
 
 The quickstart stores the secret in plaintext for brevity. Don't do that in
-production — use the vault:
+production - use the vault:
 
 ```
 ENROLMENT                                    YOUR DATABASE
@@ -80,7 +80,7 @@ base32 secret ──► buildUri() ──► QR code ──► user scans with
 vault.encrypt(secret) ──► { encrypted, salt } ──►  users table:
                                                    ┌───────────────────────────┐
                                                    │ id | salt | totp_secret   │
-                                                   │  1 | 9f2c… | v1.k8Q…      │
+                                                   │  1 | 9f2c... | v1.k8Q...      │
                                                    └───────────────────────────┘
                                                    (salt + ENCRYPTED secret,
                                                     never plaintext)
@@ -99,7 +99,7 @@ POST /login { code } ──► server loads salt + encrypted secret
                     vault.decrypt(encrypted, salt)
                               │
                               ▼
-                    verifyTotp(secret, code)   // ±1 step window
+                    verifyTotp(secret, code)   // +/-1 step window
                               │
                     ┌─────────┴─────────┐
                     ▼                   ▼
@@ -110,7 +110,7 @@ POST /login { code } ──► server loads salt + encrypted secret
 
 A TOTP secret is a permanent password: anyone who reads it from your database
 can mint valid codes forever. The vault follows the same pattern as a JWT
-signing secret — the server holds one master key in an environment variable,
+signing secret - the server holds one master key in an environment variable,
 and each user record stores a per-user salt plus the AES-256-GCM encrypted
 secret:
 
@@ -140,12 +140,12 @@ Master-key guidance:
 - Keep it in an environment variable or a secrets manager. Never commit it.
 - Rotating the master key means decrypting every stored secret with the old
   key and re-encrypting with the new one.
-- Losing the master key makes all stored secrets unrecoverable — back it up
+- Losing the master key makes all stored secrets unrecoverable - back it up
   like a database encryption key, because that is what it is.
 
 ## Rendering the QR code
 
-`otpk` deliberately does not render QR codes — `buildUri()` output feeds any QR
+`otpk` deliberately does not render QR codes - `buildUri()` output feeds any QR
 library. With [`qrcode`](https://www.npmjs.com/package/qrcode):
 
 ```ts
@@ -160,7 +160,7 @@ const dataUrl = await QRCode.toDataURL(uri); // <img src={dataUrl} />
 
 Google Authenticator's "Transfer accounts" export produces an
 `otpauth-migration://offline?data=...` URI (behind a QR code). `otpk` decodes
-the embedded protobuf payload — hand-rolled, no protobuf dependency:
+the embedded protobuf payload - hand-rolled, no protobuf dependency:
 
 ```ts
 import { parseMigrationUri, buildUri } from "otpk";
@@ -187,7 +187,7 @@ const { codes, hashed } = await generateBackupCodes(); // 10 codes, "XXXX-XXXX"
 // Later, when the user presents a recovery code:
 const presented = "1A2B-3C4D";
 const digest = await sha256Hex(presented);
-const valid = storedDigests.includes(digest); // then delete that digest — codes are single-use
+const valid = storedDigests.includes(digest); // then delete that digest - codes are single-use
 ```
 
 ## API
@@ -212,7 +212,7 @@ Options: `{ timestamp }` (unix **milliseconds**, default `Date.now()`),
 
 ### `verifyTotp(secret, code, opts?) => Promise<boolean>`
 
-Verifies a TOTP code, accepting codes within `±window` time steps (default
+Verifies a TOTP code, accepting codes within `+/-window` time steps (default
 `window: 1`) to tolerate clock drift. Every candidate is compared with a
 constant-time comparison. Same options as `totp`, plus `{ window }`.
 
@@ -269,7 +269,7 @@ code with `sha256Hex(code)` and compare against stored digests.
 
 ### `createVault(masterKey, opts?) => Promise<Vault>`
 
-Creates a vault bound to a master key — the primary encrypted-storage API.
+Creates a vault bound to a master key - the primary encrypted-storage API.
 `masterKey` is any string, typically from an environment variable;
 `opts.iterations` overrides the PBKDF2 iteration count (see `deriveKey`).
 
@@ -280,12 +280,12 @@ const secret = await vault.decrypt(encrypted, salt);     // throws on wrong key/
 ```
 
 Each `encrypt()` call generates a fresh per-user salt and derives the key on
-the spot — no key caching, no per-user state inside the vault.
+the spot - no key caching, no per-user state inside the vault.
 
 ### `generateSalt(length?) => Promise<string>`
 
 Generates `length` random bytes (default 16) and returns them as lowercase
-hex — 32 characters at the default length. Store the result on the user
+hex - 32 characters at the default length. Store the result on the user
 record next to the encrypted secret.
 
 ### `deriveKey(masterKey, salt, opts?) => Promise<CryptoKey>`
@@ -311,15 +311,15 @@ ciphertext).
 
 ### Lower-level exports
 
-- `base32Encode(bytes) / base32Decode(string)` — RFC 4648 base32.
-- `sha256Hex(string)` — SHA-256 hex digest helper.
+- `base32Encode(bytes) / base32Decode(string)` - RFC 4648 base32.
+- `sha256Hex(string)` - SHA-256 hex digest helper.
 
 ## Notes
 
 - Defaults follow the authenticator-app ecosystem: SHA-1, 6 digits, 30-second
   period.
 - Secrets are accepted in any case, with or without padding, and may contain
-  spaces — matching how authenticator apps display them.
+  spaces - matching how authenticator apps display them.
 - Counters beyond 32 bits are handled via `BigInt`, so far-future timestamps
   (e.g. the RFC 6238 `T=20000000000` test vector) work correctly.
 - Vault payloads are versioned (`v1.` prefix) and use standard algorithms
@@ -328,4 +328,4 @@ ciphertext).
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).

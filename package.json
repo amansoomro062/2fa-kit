@@ -1,7 +1,7 @@
 {
   "name": "otpk",
   "version": "1.0.0",
-  "description": "Zero-dependency 2FA toolkit: HOTP/TOTP, otpauth URIs, Google Authenticator migration import, and backup codes. Runs on Node 20+, Bun, Deno, edge workers, and browsers.",
+  "description": "Zero-dependency 2FA toolkit: HOTP/TOTP, otpauth URIs, encrypted secret storage, Google Authenticator migration import, and backup codes. Runs on Node 20+, Bun, Deno, edge workers, and browsers.",
   "keywords": [
     "2fa",
     "totp",
@@ -14,6 +14,12 @@
     "mfa"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amansoomro062/otpk.git"
+  },
+  "bugs": "https://github.com/amansoomro062/otpk/issues",
+  "homepage": "https://github.com/amansoomro062/otpk#readme",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

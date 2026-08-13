@@ -3,7 +3,7 @@
  *
  * TOTP secrets should never be stored in plaintext: anyone who reads the
  * database can mint valid codes for every account. This module follows the
- * same pattern as a JWT signing secret — the server holds one master key in
+ * same pattern as a JWT signing secret - the server holds one master key in
  * an environment variable (or secrets manager), and each user record stores a
  * per-user salt plus the encrypted secret. Compromising the database alone
  * yields nothing usable without the master key.
@@ -91,7 +91,7 @@ function hexToBytes(hex: string): Uint8Array {
  * Generate a random per-user salt.
  *
  * @param length number of random bytes (default 16)
- * @returns the salt as lowercase hex — 32 characters at the default length.
+ * @returns the salt as lowercase hex - 32 characters at the default length.
  *          Store it alongside the encrypted secret on the user record.
  */
 export function generateSalt(length = 16): Promise<string> {
@@ -144,7 +144,7 @@ export async function deriveKey(
 /**
  * Encrypt a TOTP secret with AES-256-GCM and a random 12-byte IV.
  *
- * @returns `"v1.<base64url(iv)>.<base64url(ciphertext+tag)>"` — url-safe
+ * @returns `"v1.<base64url(iv)>.<base64url(ciphertext+tag)>"` - url-safe
  *          base64, no padding. The `v1.` prefix reserves room for future
  *          format changes.
  */
@@ -196,12 +196,12 @@ export async function decryptSecret(payload: string, key: CryptoKey): Promise<st
  * per server process, one `encrypt`/`decrypt` pair per user.
  *
  * The master key should be a high-entropy random string held in an
- * environment variable or secrets manager — never committed to source
+ * environment variable or secrets manager - never committed to source
  * control. Rotating the master key means decrypting every stored secret with
  * the old key and re-encrypting with the new one.
  *
  * Each {@link Vault.encrypt} call generates a fresh salt and derives the key
- * on the spot — the vault holds no per-user state and caches nothing.
+ * on the spot - the vault holds no per-user state and caches nothing.
  */
 export async function createVault(masterKey: string, opts: CreateVaultOptions = {}): Promise<Vault> {
   if (typeof masterKey !== "string" || masterKey.length === 0) {

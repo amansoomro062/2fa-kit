@@ -1,27 +1,27 @@
-# otpkit
+# 2fa-kit
 
 Zero-dependency 2FA toolkit: HOTP/TOTP, `otpauth://` URIs, encrypted secret
 storage, Google Authenticator migration imports, and backup codes.
 
-[![npm version](https://img.shields.io/npm/v/otpkit)](https://www.npmjs.com/package/otpkit)
-[![license](https://img.shields.io/npm/l/otpkit)](https://github.com/amansoomro062/otpkit/blob/main/LICENSE)
-[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/otpkit?activeTab=dependencies)
+[![npm version](https://img.shields.io/npm/v/2fa-kit)](https://www.npmjs.com/package/2fa-kit)
+[![license](https://img.shields.io/npm/l/2fa-kit)](https://github.com/amansoomro062/2fa-kit/blob/main/LICENSE)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/2fa-kit?activeTab=dependencies)
 
 One code path runs everywhere - Node.js 20+, Bun, Deno, edge workers, and
 browsers - because all cryptography goes through the standard Web Crypto API
 (`globalThis.crypto.subtle`). No runtime dependencies, no platform shims.
 
-## Why otpkit?
+## Why 2fa-kit?
 
 - **`otplib`** is built around a plugin architecture: the core package does
-  nothing until you wire up crypto and base32 plugins. `otpkit` is one package
+  nothing until you wire up crypto and base32 plugins. `2fa-kit` is one package
   with zero configuration - the standard Web Crypto API is the only crypto
   backend, and it is always there.
 - **`speakeasy`** is effectively unmaintained (no release in years) and
-  predates modern runtimes. `otpkit` is actively maintained, ships TypeScript
+  predates modern runtimes. `2fa-kit` is actively maintained, ships TypeScript
   types, and runs on Node, Bun, Deno, edge workers, and browsers unchanged.
 - **Encrypted storage built in.** Neither library answers "how do I store the
-  secret?" `otpkit` ships a vault (PBKDF2 + AES-256-GCM) so secrets are never
+  secret?" `2fa-kit` ships a vault (PBKDF2 + AES-256-GCM) so secrets are never
   at rest in plaintext.
 
 ## Features
@@ -38,13 +38,13 @@ browsers - because all cryptography goes through the standard Web Crypto API
 ## Install
 
 ```sh
-npm install otpkit
+npm install 2fa-kit
 ```
 
 ## Quickstart: server-side 2FA in ~20 lines
 
 ```ts
-import { buildUri, generateSecret, verifyTotp } from "otpkit";
+import { buildUri, generateSecret, verifyTotp } from "2fa-kit";
 
 // 1. Enrolment: create a secret and store it with the user record.
 const secret = await generateSecret(); // "JBSWY3DPEHPK3PXP..." (32 chars)
@@ -115,11 +115,11 @@ and each user record stores a per-user salt plus the AES-256-GCM encrypted
 secret:
 
 ```ts
-import { createVault, generateSecret, buildUri, verifyTotp } from "otpkit";
+import { createVault, generateSecret, buildUri, verifyTotp } from "2fa-kit";
 
 // One vault per process. The master key comes from the environment,
 // exactly like a JWT secret.
-const vault = await createVault(process.env.OTPKIT_MASTER_KEY!);
+const vault = await createVault(process.env.MASTER_KEY!);
 
 // Enrolment: encrypt with a fresh per-user salt.
 const secret = await generateSecret();
@@ -145,11 +145,11 @@ Master-key guidance:
 
 ## Rendering the QR code
 
-`otpkit` deliberately does not render QR codes - `buildUri()` output feeds any QR
+`2fa-kit` deliberately does not render QR codes - `buildUri()` output feeds any QR
 library. With [`qrcode`](https://www.npmjs.com/package/qrcode):
 
 ```ts
-import { buildUri } from "otpkit";
+import { buildUri } from "2fa-kit";
 import QRCode from "qrcode";
 
 const uri = buildUri({ label: "alice@example.com", secret, issuer: "Acme" });
@@ -159,11 +159,11 @@ const dataUrl = await QRCode.toDataURL(uri); // <img src={dataUrl} />
 ## Importing accounts from Google Authenticator
 
 Google Authenticator's "Transfer accounts" export produces an
-`otpauth-migration://offline?data=...` URI (behind a QR code). `otpkit` decodes
+`otpauth-migration://offline?data=...` URI (behind a QR code). `2fa-kit` decodes
 the embedded protobuf payload - hand-rolled, no protobuf dependency:
 
 ```ts
-import { parseMigrationUri, buildUri } from "otpkit";
+import { parseMigrationUri, buildUri } from "2fa-kit";
 
 const accounts = await parseMigrationUri(migrationUri);
 for (const account of accounts) {
@@ -179,7 +179,7 @@ Single-use recovery codes for when the authenticator device is lost. Show the
 raw codes to the user once; store only the SHA-256 digests:
 
 ```ts
-import { generateBackupCodes, sha256Hex } from "otpkit";
+import { generateBackupCodes, sha256Hex } from "2fa-kit";
 
 const { codes, hashed } = await generateBackupCodes(); // 10 codes, "XXXX-XXXX"
 // show `codes` to the user, persist `hashed` in the database
@@ -274,7 +274,7 @@ Creates a vault bound to a master key - the primary encrypted-storage API.
 `opts.iterations` overrides the PBKDF2 iteration count (see `deriveKey`).
 
 ```ts
-const vault = await createVault(process.env.OTPKIT_MASTER_KEY!);
+const vault = await createVault(process.env.MASTER_KEY!);
 const { encrypted, salt } = await vault.encrypt(secret); // fresh salt per call
 const secret = await vault.decrypt(encrypted, salt);     // throws on wrong key/tampering
 ```

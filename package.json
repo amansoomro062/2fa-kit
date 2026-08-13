@@ -1,6 +1,6 @@
 {
   "name": "2fa-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Zero-dependency 2FA toolkit: HOTP/TOTP, otpauth URIs, encrypted secret storage, Google Authenticator migration import, and backup codes. Runs on Node 20+, Bun, Deno, edge workers, and browsers.",
   "keywords": [
     "2fa",

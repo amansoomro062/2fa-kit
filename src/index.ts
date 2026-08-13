@@ -13,6 +13,18 @@ export {
   type BackupCodesOptions,
 } from "./backup-codes.js";
 
+// Encrypted-at-rest secret storage (the "vault").
+export {
+  createVault,
+  generateSalt,
+  deriveKey,
+  encryptSecret,
+  decryptSecret,
+  type Vault,
+  type DeriveKeyOptions,
+  type CreateVaultOptions,
+} from "./secrets-vault.js";
+
 export interface GenerateSecretOptions {
   /**
    * Number of random bytes to generate (default 20, which yields a

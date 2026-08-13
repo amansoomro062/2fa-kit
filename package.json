@@ -16,10 +16,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amansoomro062/otpk.git"
+    "url": "git+https://github.com/amansoomro062/2fa-kit.git"
   },
-  "bugs": "https://github.com/amansoomro062/otpk/issues",
-  "homepage": "https://github.com/amansoomro062/otpk#readme",
+  "bugs": "https://github.com/amansoomro062/2fa-kit/issues",
+  "homepage": "https://github.com/amansoomro062/2fa-kit#readme",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

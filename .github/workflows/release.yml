@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write # OIDC for npm trusted publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      # npm 11.5+ is needed for OIDC trusted publishing
+      - run: npm install -g npm@latest
+
+      - name: Check whether the version is new
+        id: version
+        run: |
+          LOCAL=$(node -p "require('./package.json').version")
+          PUBLISHED=$(npm view 2fa-kit version 2>/dev/null || echo "none")
+          echo "local=$LOCAL published=$PUBLISHED"
+          if [ "$LOCAL" != "$PUBLISHED" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.version.outputs.changed == 'true'
+        run: npm ci
+
+      # prepublishOnly runs typecheck, tests, and build before anything ships
+      - if: steps.version.outputs.changed == 'true'
+        run: npm publish

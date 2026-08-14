@@ -3,6 +3,7 @@
 Add Google-Authenticator-style 2FA to your app. Zero dependencies, runs on
 Node 20+, Bun, Deno, edge workers, and browsers.
 
+[![CI](https://github.com/amansoomro062/2fa-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/amansoomro062/2fa-kit/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/2fa-kit)](https://www.npmjs.com/package/2fa-kit)
 [![license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/amansoomro062/2fa-kit/blob/main/LICENSE)
 

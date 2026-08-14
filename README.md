@@ -12,7 +12,8 @@ Node 20+, Bun, Deno, edge workers, and browsers.
 - Node.js 20 or newer (nothing else to install, no native modules)
 - One environment variable: `MASTER_KEY`, any long random string (used to
   encrypt stored secrets, same idea as a JWT secret)
-- Two columns on your user record: `totp_secret` and `totp_salt`
+- Three columns on your user record: `totp_secret`, `totp_salt`, and
+  `totp_last_step` (an integer, for replay protection)
 
 ## Install
 
@@ -45,12 +46,21 @@ const { encrypted, salt } = await vault.encrypt(secret);
 ### Step 2: verify at login
 
 ```ts
-import { verifyTotp } from "2fa-kit";
+import { verifyTotpWithDelta } from "2fa-kit";
 
 const secret = await vault.decrypt(user.totpSecret, user.totpSalt);
-const ok = await verifyTotp(secret, codeFromLoginForm);
-// true = allow, false = deny
+const { valid, step } = await verifyTotpWithDelta(secret, codeFromLoginForm);
+
+if (!valid || step! <= user.totpLastStep) deny();
+user.totpLastStep = step!; // persist, then allow
 ```
+
+The `step` check is replay protection, and it is not optional: codes stay
+valid for up to 90 seconds of clock drift, so a code that is only checked
+with a boolean can be intercepted and used again. Storing the last accepted
+step and requiring each login to beat it closes that door (RFC 6238 requires
+it). `verifyTotp` still exists and returns a plain boolean for cases where
+replay is handled elsewhere.
 
 That is the entire integration. Everything below is optional extras.
 
@@ -66,11 +76,20 @@ const dataUrl = await QRCode.toDataURL(uri); // <img src={dataUrl} />
 ## Extras
 
 **Backup codes** - one-time recovery codes when the user loses their phone.
-Store only the hashes:
+Store only the hashes. Pass your master key so a leaked database row cannot
+be brute-forced offline:
 
 ```ts
-const { codes, hashed } = await generateBackupCodes(); // show codes once, store hashed
+const { codes, hashed } = await generateBackupCodes({ key: masterKey });
+// show `codes` once, store `hashed`
+
+const { valid, remaining } = await verifyBackupCode(input, user.backupCodes, { key: masterKey });
+if (!valid) deny();
+user.backupCodes = remaining; // codes are single-use: persist, then allow
 ```
+
+`verifyBackupCode` accepts any case, with or without dashes, and compares in
+constant time.
 
 **Import from Google Authenticator** - decode a "Transfer accounts" export QR:
 
@@ -85,6 +104,7 @@ const accounts = await parseMigrationUri(migrationUri); // -> ParsedOtpauth[]
 | `generateSecret(opts?)` | Random base32 secret (default 32 chars) |
 | `totp(secret, opts?)` | Current code + seconds remaining |
 | `verifyTotp(secret, code, opts?)` | Check a code, tolerates +/-1 time step |
+| `verifyTotpWithDelta(secret, code, opts?)` | Check a code and report the matched step, for replay protection |
 | `hotp(secret, counter, opts?)` | Counter-based code (RFC 4226) |
 | `buildUri(opts)` | `otpauth://` URI for the QR code |
 | `parseUri(uri)` | Parse an `otpauth://` URI back into parts |
@@ -92,9 +112,10 @@ const accounts = await parseMigrationUri(migrationUri); // -> ParsedOtpauth[]
 | `generateSalt(length?)` | Random hex salt for the user record |
 | `deriveKey(masterKey, salt)` | Derive the AES key directly (advanced) |
 | `encryptSecret` / `decryptSecret` | Low-level encrypt/decrypt (advanced) |
-| `generateBackupCodes(opts?)` | Recovery codes + SHA-256 hashes |
+| `generateBackupCodes(opts?)` | Recovery codes + digests (HMAC when `key` is set) |
+| `verifyBackupCode(input, hashed, opts?)` | Check a backup code and consume it |
 | `parseMigrationUri(uri)` | Decode a Google Authenticator export |
-| `sha256Hex(string)` | SHA-256 hex digest helper |
+| `sha256Hex(string)` / `hmacSha256Hex(key, string)` | Hex digest helpers |
 | `base32Encode` / `base32Decode` | RFC 4648 base32 |
 
 Full signatures and options are in the TypeScript types (`dist/index.d.ts`).

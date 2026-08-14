@@ -3,14 +3,24 @@ import { base32Encode } from "./base32.js";
 export { base32Encode, base32Decode } from "./base32.js";
 export { hotp, type HotpOptions, type OtpAlgorithm } from "./hotp.js";
 export { totp, type TotpOptions, type TotpResult } from "./totp.js";
-export { verifyTotp, type VerifyTotpOptions } from "./verify.js";
+export {
+  verifyTotp,
+  verifyTotpWithDelta,
+  type VerifyTotpOptions,
+  type VerifyTotpDeltaResult,
+} from "./verify.js";
 export { buildUri, parseUri, type BuildUriOptions, type ParsedOtpauth } from "./uri.js";
 export { parseMigrationUri } from "./migration.js";
 export {
   generateBackupCodes,
+  verifyBackupCode,
+  normalizeBackupCode,
   sha256Hex,
+  hmacSha256Hex,
   type BackupCodes,
   type BackupCodesOptions,
+  type VerifyBackupCodeOptions,
+  type VerifyBackupCodeResult,
 } from "./backup-codes.js";
 
 // Encrypted-at-rest secret storage (the "vault").

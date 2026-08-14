@@ -120,12 +120,6 @@ Full signatures and options are in the TypeScript types (`dist/index.d.ts`).
   instead of decrypting.
 - Losing `MASTER_KEY` makes stored secrets unrecoverable. Back it up.
 
-## Examples
-
-- [expo-authenticator](./examples/expo-authenticator) - a minimal Expo
-  (React Native) authenticator app that generates TOTP codes fully
-  on-device using 2fa-kit.
-
 ## License
 
 MIT - see [LICENSE](./LICENSE).

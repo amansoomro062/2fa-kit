@@ -1,0 +1,7 @@
+{
+  "appName": "Acme Authenticator",
+  "issuer": "Acme",
+  "primaryColor": "#1E88E5",
+  "accentColor": "#FFC107",
+  "logoPath": "assets/logo.png"
+}

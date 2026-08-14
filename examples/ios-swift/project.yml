@@ -1,0 +1,20 @@
+# XcodeGen project definition.
+# Regenerate the Xcode project after editing:
+#   xcodegen && open AcmeAuthenticator.xcodeproj
+name: AcmeAuthenticator
+options:
+  bundleIdPrefix: com.acme
+targets:
+  AcmeAuthenticator:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.acme.authenticator
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Sources/Info.plist
+        TARGETED_DEVICE_FAMILY: 1
+        SWIFT_VERSION: "5.9"

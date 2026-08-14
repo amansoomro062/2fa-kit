@@ -1,0 +1,8 @@
+{
+  "appName": "Acme Authenticator",
+  "issuer": "Acme",
+  "bundleIdSuffix": "authenticator",
+  "primaryColor": "#1D4ED8",
+  "accentColor": "#F59E0B",
+  "logoPath": "Sources/Assets.xcassets/AppIcon.appiconset"
+}

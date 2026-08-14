@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- whitelabel: app_name must match appName in branding.json / Branding.kt -->
+<resources>
+    <string name="app_name">Acme Authenticator</string>
+    <string name="add_account">Add account</string>
+    <string name="paste_uri_hint">Paste the otpauth:// URI from your enrolment page (or from a 2fa-kit server):</string>
+    <string name="uri_hint">otpauth://totp/...</string>
+    <string name="invalid_uri">Could not add account: %1$s</string>
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_message">Remove %1$s? You will need to re-enrol to get it back.</string>
+    <string name="delete">Delete</string>
+    <string name="bad_secret">invalid secret</string>
+</resources>

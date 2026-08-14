@@ -77,6 +77,19 @@ const { codes, hashed } = await generateBackupCodes(); // show codes once, store
 const accounts = await parseMigrationUri(migrationUri); // -> ParsedOtpauth[]
 ```
 
+## Examples
+
+- [examples/server-node](./examples/server-node) - reference Node.js server (plain `node:http`) using the published package: enrol, verify, backup codes, recovery
+- [examples/expo-authenticator](./examples/expo-authenticator) - React Native (Expo) authenticator app running 2fa-kit on-device via Web Crypto polyfills
+- [examples/android-kotlin](./examples/android-kotlin) - white-label native Android authenticator (Kotlin, native RFC 6238 implementation)
+- [examples/ios-swift](./examples/ios-swift) - white-label native iOS authenticator (Swift, SwiftUI + Keychain, native RFC 6238 implementation)
+- [examples/flutter](./examples/flutter) - white-label Flutter authenticator (Dart, native RFC 6238 implementation)
+
+The Kotlin, Swift, and Flutter examples cannot use 2fa-kit directly (it is
+TypeScript); they reimplement the same RFC 6238 standard natively, so codes
+interoperate with any 2fa-kit server. Each ships with a `branding.json` for
+white-label customization.
+
 ## API
 
 | Function | What it does |

@@ -1,0 +1,27 @@
+name: whitelabel_authenticator
+description: >-
+  Minimal white-label TOTP authenticator app (RFC 6238). Interoperates with
+  any server that uses the 2fa-kit npm package.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  crypto: ^3.0.3
+  flutter_secure_storage: ^9.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - branding.json
+    # Add your logo file here too, e.g.:
+    # - assets/logo.png

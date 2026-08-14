@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  whitelabel: placeholder launcher icon. Replace this file with your own
+  vector (or generate mipmaps with Android Studio's Image Asset tool and
+  point android:icon in AndroidManifest.xml at them). Path is referenced
+  as logoPath in branding.json.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#1B3A6B"
+        android:pathData="M0,0h48v48h-48z" />
+    <path
+        android:fillColor="#E8A020"
+        android:pathData="M24,10a14,14 0 1,0 0.1,0zM24,16a8,8 0 1,1 -0.1,0z" />
+</vector>

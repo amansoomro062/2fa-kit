@@ -1,0 +1,8 @@
+{
+  "appName": "Acme Authenticator",
+  "issuer": "Acme",
+  "packageSuffix": "acme",
+  "primaryColor": "#1B3A6B",
+  "accentColor": "#E8A020",
+  "logoPath": "app/src/main/res/drawable/ic_launcher.xml"
+}

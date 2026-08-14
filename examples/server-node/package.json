@@ -1,0 +1,16 @@
+{
+  "name": "2fa-kit-example-server-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reference Node.js server showing server-side use of the 2fa-kit SDK",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "2fa-kit": "^1.0.1"
+  }
+}

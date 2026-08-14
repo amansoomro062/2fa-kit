@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- whitelabel: these must match primaryColor / accentColor in branding.json -->
+<resources>
+    <color name="primary">#1B3A6B</color>
+    <color name="accent">#E8A020</color>
+</resources>
